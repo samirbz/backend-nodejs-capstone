@@ -9,14 +9,21 @@ let dbInstance = null;
 const dbName = `${process.env.MONGO_DB}`;
 
 async function connectToDatabase() {
-    if (dbInstance){
+    if (dbInstance) {
         return dbInstance
     };
 
-    const client = new MongoClient(url);      
+    const client = new MongoClient(url);
 
     // Task 1: Connect to MongoDB
-    // {{insert code}}
+    try {
+        await client.connect();
+        dbInstance = client.db(dbName)
+        return dbInstance;
+    } catch (error) {
+        console.error("Failed to connect to the database", error)
+        throw error;
+    }
 
     // Task 2: Connect to database giftDB and store in variable dbInstance
     //{{insert code}}
