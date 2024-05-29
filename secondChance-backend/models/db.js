@@ -1,33 +1,23 @@
 // db.js
 require('dotenv').config();
-const { MongoClient } = require('mongodb');
+const MongoClient = require('mongodb').MongoClient;
 
 // MongoDB connection URL with authentication options
-const url = process.env.MONGO_URL;
-const dbName = process.env.MONGO_DB;
+let url = `${process.env.MONGO_URL}`;
 
 let dbInstance = null;
+const dbName = "secondChance";
 
 async function connectToDatabase() {
     if (dbInstance) {
-        return dbInstance;
-    }
+        return dbInstance
+    };
 
-    try {
-        const client = new MongoClient(url);
+    const client = new MongoClient(url);
 
-        // Connect to MongoDB
-        await client.connect();
-
-        // Connect to database and store in variable dbInstance
-        dbInstance = client.db(dbName);
-
-        // Return database instance
-        return dbInstance;
-    } catch (error) {
-        console.error('Error connecting to database:', error);
-        throw error;
-    }
+    await client.connect();
+    dbInstance = client.db(dbName);
+    return dbInstance;
 }
 
 module.exports = connectToDatabase;
